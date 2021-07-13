@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:librarymanagerclient/models/history/book_history.dart';
+import 'package:librarymanagerclient/models/user/user.dart';
 import 'package:librarymanagerclient/models/validators/isbn_validators.dart';
+import 'package:librarymanagerclient/providers/db/book/book_multiple_tables_provider.dart';
 import 'package:librarymanagerclient/providers/db/book/book_state_table_provider.dart';
 import 'package:librarymanagerclient/providers/db/book/book_table_provider.dart';
-import 'package:librarymanagerclient/providers/db/history/book_history_table_provider.dart';
 import 'package:librarymanagerclient/providers/db/user/user_table_provider.dart';
 import 'package:librarymanagerclient/repositories/barcode_result_repository.dart';
 import 'package:librarymanagerclient/repositories/book_state_repository.dart';
@@ -155,9 +156,8 @@ class Borrow extends HookWidget {
             content: new Text('登録完了'),
           ),
         );
-        var _userName =
-            await UserTableProvider().getUserFromIdentifier(stateReader);
-        exporterUserName.exportResult(_userName);
+        User _user = await UserTableProvider().getUser(stateReader);
+        exporterUserName.exportResult(_user.name);
         exporterBookState.exportResult({'holderId': stateReader});
       } else {
         //  登録せずに戻るボタンで戻ってくるとき
@@ -167,20 +167,21 @@ class Borrow extends HookWidget {
 
     // NFCのidentifierでユーザーが登録されているか確認する
     // 登録がなければ登録画面に遷移させる
-    _() async {
+    _checkUserRegistered() async {
       if (stateReader.isNotEmpty) {
-        var _userName =
-            await UserTableProvider().getUserFromIdentifier(stateReader);
-        if (_userName == null) {
+        try {
+          User _user = await UserTableProvider().getUser(stateReader);
+          if (_user.name != stateUserName) {
+            exporterUserName.exportResult(_user.name);
+            exporterBookState.exportResult({'holderId': stateReader});
+          }
+        } catch (e) {
           _navigateAndDisplay(context);
-        } else if (_userName != stateUserName) {
-          exporterUserName.exportResult(_userName);
-          exporterBookState.exportResult({'holderId': stateReader});
         }
       }
     }
 
-    _(); // providerが stateReader に値が入ったタイミングで関連Widgetを再ビルドしてくれるのでここで呼んでおく
+    _checkUserRegistered(); // providerが stateReader に値が入ったタイミングで関連Widgetを再ビルドしてくれるのでここで呼んでおく
 
     Widget _displayText() {
       if (stateReader.isEmpty) {
@@ -248,8 +249,8 @@ class Borrow extends HookWidget {
               final bookHistory =
                   BookHistory.fromJsonBookState(bookState.toJson());
               print(bookHistory.toJson());
-              await BookStateTableProvider().updateBookState(bookState);
-              await BookHistoryTableProvider().saveBookHistory(bookHistory);
+              await BookMultipleTablesProvider()
+                  .saveBookHistoryBatch(bookState, bookHistory);
               Navigator.pop(context, true);
             } else {
               print(bookState.toJson());

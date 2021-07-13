@@ -1,111 +1,94 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:librarymanagerclient/errors/book/BookStateNotFoundException.dart';
 import 'package:librarymanagerclient/models/book/book_state.dart';
-import 'package:librarymanagerclient/providers/db/book/book_table_provider.dart';
-import 'package:librarymanagerclient/providers/db/db_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
-class BookStateTableProvider extends DBProvider {
-  @override
-  String get databaseName => 'book_db.sqlite';
+class BookStateTableProvider {
+  static final String tableName = 'book_states';
 
-  @override
-  String get tableName => 'book_state';
+  Future<BookState> getBookState(String isbn, int seq) async {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('isbn', isEqualTo: isbn)
+        .where('seq', isEqualTo: seq)
+        .get();
 
-  @override
-  int get version => 1;
-
-  @override
-  createTable(Database db, int version) => db.execute("""
-      CREATE TABLE $tableName(
-        isbn STRING NOT NULL,
-        seq INTEGER NOT NULL,
-        isBorrowed INTEGER NOT NULL,
-        holderId TEXT,
-        borrowFrom TEXT,
-        borrowTo TEXT,
-        createdAt TEXT NOT NULL,
-        updatedAt TEXT NOT NULL,
-        UNIQUE(isbn, seq)
-      );
-      """);
-
-  Future<BookState> getBookStatus(String isbn, int seq) async {
-    final db = await table;
-    final List<Map<String, dynamic>> res = (await db.query(
-      tableName,
-      where: "isbn = ? AND seq = ?",
-      whereArgs: [isbn, seq],
-    ));
-    if (res.length == 0) {
+    if (res.docs.length == 0) {
       throw BookStateNotFoundException();
     }
-    var bookState = {...res[0]};
-    bookState["isbn"] = bookState["isbn"].toString();
+    var bookState = {...res.docs.last.data()};
+
     return BookState.fromJson(bookState);
+  }
+
+  Future<String> getBookStateId(String isbn, int seq) async {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('isbn', isEqualTo: isbn)
+        .where('seq', isEqualTo: seq)
+        .get();
+
+    if (res.docs.length == 0) {
+      throw BookStateNotFoundException();
+    }
+    var bookStateId = res.docs.last.id;
+
+    return bookStateId;
   }
 
   // Search for books that are not borrowed.
   Future<BookState> searchBookNotBorrowed(String isbn) async {
-    final db = await table;
-    final List<Map<String, dynamic>> res = (await db.query(
-      tableName,
-      where: "isbn = ? AND isBorrowed = 0",
-      whereArgs: [isbn],
-    ));
-    if (res.length == 0) {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('isbn', isEqualTo: isbn)
+        .where('isBorrowed', isEqualTo: 0)
+        .get();
+
+    if (res.docs.length == 0) {
       throw BookStateNotFoundException();
     }
-    var bookState = {...res[0]};
-    bookState["isbn"] = res[0]["isbn"].toString();
+    var bookState = {...res.docs.last.data()};
+
     return BookState.fromJson(bookState);
   }
 
-  Future<int> saveBookState(BookState bookState) async {
-    final db = await table;
-    return await db.insert(tableName, bookState.toJson());
+  Future<void> updateBookState(BookState bookState) async {
+    String bookStateId = await getBookStateId(bookState.isbn, bookState.seq);
+    Map<String, dynamic> data = bookState.toJson();
+
+    await FirebaseFirestore.instance
+        .collection(tableName)
+        .doc(bookStateId)
+        .update(data);
   }
 
-  // Used to initialize book state.
-  Future<int> saveBookByIsbn(String isbn) async {
-    final bookProvider = BookTableProvider();
-    final int seq = (await bookProvider.getNumberOfBooks(isbn));
-    final String now = DateTime.now().toString();
-    final BookState bookState = BookState(
-      isbn: isbn,
-      seq: seq,
-      isBorrowed: 0,
-      holderId: null,
-      borrowFrom: null,
-      borrowTo: null,
-      createdAt: now,
-      updatedAt: now,
-    );
+  Future<List<BookState>> getBookStates() async {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .orderBy('createdAt', descending: true)
+        .get();
+    List<BookState> bookStates = [];
+    res.docs.forEach((element) {
+      var book = {...element.data()};
+      bookStates.add(BookState.fromJson(book));
+    });
 
-    return saveBookState(bookState);
+    return bookStates;
   }
 
-  Future<int> updateBookState(BookState bookState) async {
-    final db = await table;
-    return await db.update(tableName, bookState.toJson(),
-        where: 'isbn = ? and seq = ?',
-        whereArgs: [bookState.isbn, bookState.seq]);
-  }
-
-  Future<List<Map<String, dynamic>>> getBookStateByUser(String holderId) async {
-    final db = await table;
-    final List<Map<String, dynamic>> res = (await db.query(
-      tableName,
-      where: "holderId = ?",
-      whereArgs: [holderId],
-    ));
-    if (res.length == 0) {
+  Future<List<BookState>> getBookStateByUser(String holderId) async {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('holderId', isEqualTo: holderId)
+        .get();
+    if (res.docs.length == 0) {
       throw BookStateNotFoundException();
     }
-    return res;
-  }
+    List<BookState> bookStates = [];
+    res.docs.forEach((element) {
+      var book = {...element.data()};
+      bookStates.add(BookState.fromJson(book));
+    });
 
-  Future<List<Map<String, dynamic>>> rawQuery(String sql) async {
-    final db = await table;
-    return await db.rawQuery(sql);
+    return bookStates;
   }
 }

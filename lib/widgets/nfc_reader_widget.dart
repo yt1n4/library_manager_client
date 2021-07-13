@@ -25,7 +25,10 @@ class NfcReaderWidget {
     } else if (Platform.isIOS) {
       // iOSのとき
       // デバイスのNFCリーダーが機能しないため適当な値を入れる
-      exporter.exportResult('145d1c7400031601');
+      if (state.isEmpty) {
+        Future.delayed(Duration(milliseconds: 10))
+            .then((_) => exporter.exportResult('0000000000000'));
+      }
     }
   }
 }

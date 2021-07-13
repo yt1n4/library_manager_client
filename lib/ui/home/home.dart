@@ -62,7 +62,7 @@ class Home extends StatelessWidget {
         RaisedButton(
           child: Text('SEARCH'),
           onPressed: () {
-//            Navigator.of(context).pushNamed('/search');
+            Navigator.of(context).pushNamed('/book_list');
           },
         ),
       ],

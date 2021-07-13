@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/all.dart';
-import 'package:librarymanagerclient/models/book/book.dart';
 import 'package:librarymanagerclient/providers/client/ndlapi_client.dart';
-import 'package:librarymanagerclient/providers/db/book/book_state_table_provider.dart';
-import 'package:librarymanagerclient/providers/db/book/book_table_provider.dart';
+import 'package:librarymanagerclient/providers/db/book/book_multiple_tables_provider.dart';
 import 'package:librarymanagerclient/repositories/barcode_result_repository.dart';
 import 'package:librarymanagerclient/widgets/barcode_scanner_widget.dart';
 
@@ -40,18 +38,6 @@ class Register extends HookWidget {
   Widget _buildBarcodeScanning() {
     final String stateScanner = useProvider(barcodeResultProvider.state);
     final exporter = useProvider(barcodeResultProvider);
-
-    void _registerBook(String isbn, String title) async {
-      final Book book = Book(
-        isbn: isbn,
-        seq: (await BookTableProvider().getNumberOfBooks(isbn)) + 1,
-        title: title,
-        createdAt: DateTime.now().toString(),
-        updatedAt: DateTime.now().toString(),
-      );
-      await BookTableProvider().saveBook(book);
-      await BookStateTableProvider().saveBookByIsbn(isbn);
-    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,7 +76,8 @@ class Register extends HookWidget {
                                 color: Theme.of(context).primaryColor),
                           ),
                           onPressed: () async {
-                            _registerBook(isbn, title);
+                            await BookMultipleTablesProvider()
+                                .saveBookBatch(isbn, title);
                             _scaffoldKey.currentState.showSnackBar(
                               SnackBar(
                                 content: Text('登録完了'),

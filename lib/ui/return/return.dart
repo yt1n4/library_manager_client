@@ -4,9 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:librarymanagerclient/models/book/book_state.dart';
 import 'package:librarymanagerclient/models/history/book_history.dart';
-import 'package:librarymanagerclient/providers/db/book/book_state_table_provider.dart';
-import 'package:librarymanagerclient/providers/db/book/book_table_provider.dart';
-import 'package:librarymanagerclient/providers/db/history/book_history_table_provider.dart';
+import 'package:librarymanagerclient/models/user/user.dart';
+import 'package:librarymanagerclient/providers/db/book/book_multiple_tables_provider.dart';
 import 'package:librarymanagerclient/providers/db/user/user_table_provider.dart';
 import 'package:librarymanagerclient/repositories/check_return_book_repository.dart';
 import 'package:librarymanagerclient/ui/borrow/borrow.dart';
@@ -15,8 +14,8 @@ import 'package:librarymanagerclient/widgets/nfc_reader_widget.dart';
 final userNameProvider = FutureProvider.autoDispose((ref) async {
   final identifier = ref.watch(nfcResultProvider.state);
   if (identifier.isNotEmpty) {
-    var userName = await UserTableProvider().getUserFromIdentifier(identifier);
-    return userName;
+    User user = await UserTableProvider().getUser(identifier);
+    return user.name;
   } else {
     return '';
   }
@@ -26,20 +25,9 @@ final userNameProvider = FutureProvider.autoDispose((ref) async {
 final isBorrowBookProvider = FutureProvider.autoDispose((ref) async {
   final identifier = ref.watch(nfcResultProvider.state);
   if (identifier.isNotEmpty) {
-    var books = await BookStateTableProvider().getBookStateByUser(identifier);
-    List<Map<String, dynamic>> listBookInfo = List<Map<String, dynamic>>();
-
-    for (int i = 0; i < books.length; i++) {
-      var bookInfo =
-          await BookTableProvider().getBook(books[i]['isbn'].toString());
-      listBookInfo.add({
-        'isbn': bookInfo.isbn,
-        'title': bookInfo.title,
-        'seq': books[i]['seq'],
-        'createdAt': books[i]['createdAt'],
-      });
-    }
-    return listBookInfo;
+    List<Map<String, dynamic>> bookInfo =
+        await BookMultipleTablesProvider().getBookInfoByUser(identifier);
+    return bookInfo;
   } else {
     return [];
   }
@@ -171,10 +159,8 @@ class Return extends HookWidget {
                         final bookHistory =
                             BookHistory.fromJsonBookState(bookState.toJson());
                         print(bookHistory.toJson());
-                        await BookStateTableProvider()
-                            .updateBookState(bookState);
-                        await BookHistoryTableProvider()
-                            .saveBookHistory(bookHistory);
+                        await BookMultipleTablesProvider()
+                            .saveBookHistoryBatch(bookState, bookHistory);
                       });
                       Navigator.pop(context, true);
                     },
