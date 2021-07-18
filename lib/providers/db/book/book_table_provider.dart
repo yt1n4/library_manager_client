@@ -1,59 +1,49 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:librarymanagerclient/errors/book/BookNotFoundException.dart';
 import 'package:librarymanagerclient/models/book/book.dart';
 import 'package:librarymanagerclient/providers/client/ndlapi_client.dart';
-import 'package:librarymanagerclient/providers/db/db_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
-class BookTableProvider extends DBProvider {
-  @override
-  String get databaseName => 'book_db.sqlite';
-
-  @override
-  String get tableName => 'books';
-
-  @override
-  int get version => 1;
-
-  @override
-  createTable(Database db, int version) => db.execute("""
-      CREATE TABLE $tableName(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        isbn STRING NOT NULL,
-        seq INTEGER NOT NULL,
-        title STRING NOT NULL,
-        createdAt TEXT NOT NULL,
-        updatedAt TEXT NOT NULL,
-        UNIQUE(isbn, seq)
-      );
-      """);
+class BookTableProvider {
+  static final String tableName = 'books';
 
   Future<Book> getBook(String isbn) async {
-    final db = await table;
-    final List<Map<String, dynamic>> res = (await db.query(
-      tableName,
-      where: "isbn=?",
-      whereArgs: [isbn],
-    ));
-    if (res.length == 0) {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('isbn', isEqualTo: isbn)
+        .get();
+
+    if (res.docs.length == 0) {
       throw BookNotFoundException();
     }
-    var book = {...res[res.length - 1]};
-    book["isbn"] = book["isbn"].toString();
+    var book = res.docs.last.data();
+
     return Book.fromJson(book);
   }
 
   Future<List<Book>> getBooks() async {
-    final db = await table;
-    List<Book> books = List<Book>();
-    (await db.query(tableName))
-        .where((element) => element != null)
-        .forEach((element) {
-      var book = {...element};
-      book["isbn"] = element["isbn"].toString();
+    var res = await FirebaseFirestore.instance.collection(tableName).get();
+    List<Book> books = [];
+    res.docs.forEach((element) {
+      var book = {...element.data()};
       books.add(Book.fromJson(book));
     });
 
     return books;
+  }
+
+  Future<String> getBookId(String isbn, int seq) async {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('isbn', isEqualTo: isbn)
+        .where('seq', isEqualTo: seq)
+        .get();
+
+    if (res.docs.length == 0) {
+      throw BookNotFoundException();
+    }
+    var id = res.docs.last.id;
+
+    return id;
   }
 
   // seqが必ず順番になっていないと成り立たない
@@ -65,12 +55,12 @@ class BookTableProvider extends DBProvider {
     }
   }
 
-  Future<int> saveBook(Book book) async {
-    final db = await table;
-    return await db.insert(tableName, book.toJson());
+  Future<void> saveBook(Book book) async {
+    var data = book.toJson();
+    await FirebaseFirestore.instance.collection(tableName).doc().set(data);
   }
 
-  Future<int> saveBookByIsbn(String isbn) async {
+  Future<void> saveBookByIsbn(String isbn) async {
     final String title = await NdlApiClient().getBookByIsbn(isbn);
     final String now = DateTime.now().toString();
     final Book book = Book(
@@ -80,12 +70,11 @@ class BookTableProvider extends DBProvider {
       createdAt: now,
       updatedAt: now,
     );
-
-    return saveBook(book);
+    saveBook(book);
   }
 
-  Future<List<Map<String, dynamic>>> rawQuery(String sql) async {
-    final db = await table;
-    return await db.rawQuery(sql);
+  Future<void> delete(String isbn, int seq) async {
+    var id = await getBookId(isbn, seq);
+    await FirebaseFirestore.instance.collection(tableName).doc(id).delete();
   }
 }

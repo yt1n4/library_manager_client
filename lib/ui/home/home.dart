@@ -31,13 +31,13 @@ class Home extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Text('USER MENU'),
-        RaisedButton(
+        ElevatedButton(
           child: Text('BORROW'),
           onPressed: () {
             Navigator.of(context).pushNamed(Borrow.routeName).then((value) {
               // BORROWボタンを押して戻ってきたら
               if (value == true) {
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('DONE! (BORROW)'),
                   duration: Duration(seconds: 3),
                 ));
@@ -45,13 +45,13 @@ class Home extends StatelessWidget {
             });
           },
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text('RETURN'),
           onPressed: () {
             Navigator.of(context).pushNamed(Return.routeName).then((value) {
               // RETURNボタンを押して戻ってきたら
               if (value == true) {
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('DONE! (RETURN)'),
                   duration: Duration(seconds: 3),
                 ));
@@ -59,10 +59,10 @@ class Home extends StatelessWidget {
             });
           },
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text('SEARCH'),
           onPressed: () {
-//            Navigator.of(context).pushNamed('/search');
+            Navigator.of(context).pushNamed('/book_list');
           },
         ),
       ],
@@ -74,19 +74,19 @@ class Home extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Text('MANAGER MENU'),
-        RaisedButton(
+        ElevatedButton(
           child: Text('REGISTER'),
           onPressed: () {
             Navigator.of(context).pushNamed('/register');
           },
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text('INVENTROY CHECK'),
           onPressed: () {
 //            Navigator.of(context).pushNamed('/inventory_check');
           },
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text('DEBUG'),
           onPressed: () {
 //            Navigator.of(context).pushNamed('/debug');

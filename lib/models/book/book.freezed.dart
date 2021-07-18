@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'book.dart';
 
@@ -8,23 +8,25 @@ part of 'book.dart';
 // **************************************************************************
 
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 Book _$BookFromJson(Map<String, dynamic> json) {
   return _Book.fromJson(json);
 }
 
+/// @nodoc
 class _$BookTearOff {
   const _$BookTearOff();
 
-// ignore: unused_element
   _Book call(
-      {int id,
-      @required String isbn,
-      @required int seq,
-      @required String title,
-      @required String createdAt,
-      @required String updatedAt}) {
+      {required String isbn,
+      required int seq,
+      required String title,
+      required String createdAt,
+      required String updatedAt}) {
     return _Book(
-      id: id,
       isbn: isbn,
       seq: seq,
       title: title,
@@ -32,35 +34,37 @@ class _$BookTearOff {
       updatedAt: updatedAt,
     );
   }
+
+  Book fromJson(Map<String, Object> json) {
+    return Book.fromJson(json);
+  }
 }
 
-// ignore: unused_element
+/// @nodoc
 const $Book = _$BookTearOff();
 
+/// @nodoc
 mixin _$Book {
-  int get id;
-  String get isbn;
-  int get seq;
-  String get title;
-  String get createdAt;
-  String get updatedAt;
+  String get isbn => throw _privateConstructorUsedError;
+  int get seq => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
+  String get updatedAt => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson();
-  $BookCopyWith<Book> get copyWith;
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $BookCopyWith<Book> get copyWith => throw _privateConstructorUsedError;
 }
 
+/// @nodoc
 abstract class $BookCopyWith<$Res> {
   factory $BookCopyWith(Book value, $Res Function(Book) then) =
       _$BookCopyWithImpl<$Res>;
   $Res call(
-      {int id,
-      String isbn,
-      int seq,
-      String title,
-      String createdAt,
-      String updatedAt});
+      {String isbn, int seq, String title, String createdAt, String updatedAt});
 }
 
+/// @nodoc
 class _$BookCopyWithImpl<$Res> implements $BookCopyWith<$Res> {
   _$BookCopyWithImpl(this._value, this._then);
 
@@ -70,37 +74,47 @@ class _$BookCopyWithImpl<$Res> implements $BookCopyWith<$Res> {
 
   @override
   $Res call({
-    Object id = freezed,
-    Object isbn = freezed,
-    Object seq = freezed,
-    Object title = freezed,
-    Object createdAt = freezed,
-    Object updatedAt = freezed,
+    Object? isbn = freezed,
+    Object? seq = freezed,
+    Object? title = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed ? _value.id : id as int,
-      isbn: isbn == freezed ? _value.isbn : isbn as String,
-      seq: seq == freezed ? _value.seq : seq as int,
-      title: title == freezed ? _value.title : title as String,
-      createdAt: createdAt == freezed ? _value.createdAt : createdAt as String,
-      updatedAt: updatedAt == freezed ? _value.updatedAt : updatedAt as String,
+      isbn: isbn == freezed
+          ? _value.isbn
+          : isbn // ignore: cast_nullable_to_non_nullable
+              as String,
+      seq: seq == freezed
+          ? _value.seq
+          : seq // ignore: cast_nullable_to_non_nullable
+              as int,
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      updatedAt: updatedAt == freezed
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
+/// @nodoc
 abstract class _$BookCopyWith<$Res> implements $BookCopyWith<$Res> {
   factory _$BookCopyWith(_Book value, $Res Function(_Book) then) =
       __$BookCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int id,
-      String isbn,
-      int seq,
-      String title,
-      String createdAt,
-      String updatedAt});
+      {String isbn, int seq, String title, String createdAt, String updatedAt});
 }
 
+/// @nodoc
 class __$BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res>
     implements _$BookCopyWith<$Res> {
   __$BookCopyWithImpl(_Book _value, $Res Function(_Book) _then)
@@ -111,44 +125,50 @@ class __$BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object id = freezed,
-    Object isbn = freezed,
-    Object seq = freezed,
-    Object title = freezed,
-    Object createdAt = freezed,
-    Object updatedAt = freezed,
+    Object? isbn = freezed,
+    Object? seq = freezed,
+    Object? title = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_Book(
-      id: id == freezed ? _value.id : id as int,
-      isbn: isbn == freezed ? _value.isbn : isbn as String,
-      seq: seq == freezed ? _value.seq : seq as int,
-      title: title == freezed ? _value.title : title as String,
-      createdAt: createdAt == freezed ? _value.createdAt : createdAt as String,
-      updatedAt: updatedAt == freezed ? _value.updatedAt : updatedAt as String,
+      isbn: isbn == freezed
+          ? _value.isbn
+          : isbn // ignore: cast_nullable_to_non_nullable
+              as String,
+      seq: seq == freezed
+          ? _value.seq
+          : seq // ignore: cast_nullable_to_non_nullable
+              as int,
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      updatedAt: updatedAt == freezed
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
+/// @nodoc
 @JsonSerializable()
 class _$_Book implements _Book {
   const _$_Book(
-      {this.id,
-      @required this.isbn,
-      @required this.seq,
-      @required this.title,
-      @required this.createdAt,
-      @required this.updatedAt})
-      : assert(isbn != null),
-        assert(seq != null),
-        assert(title != null),
-        assert(createdAt != null),
-        assert(updatedAt != null);
+      {required this.isbn,
+      required this.seq,
+      required this.title,
+      required this.createdAt,
+      required this.updatedAt});
 
   factory _$_Book.fromJson(Map<String, dynamic> json) =>
       _$_$_BookFromJson(json);
 
-  @override
-  final int id;
   @override
   final String isbn;
   @override
@@ -162,15 +182,13 @@ class _$_Book implements _Book {
 
   @override
   String toString() {
-    return 'Book(id: $id, isbn: $isbn, seq: $seq, title: $title, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Book(isbn: $isbn, seq: $seq, title: $title, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _Book &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.isbn, isbn) ||
                 const DeepCollectionEquality().equals(other.isbn, isbn)) &&
             (identical(other.seq, seq) ||
@@ -188,13 +206,13 @@ class _$_Book implements _Book {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(isbn) ^
       const DeepCollectionEquality().hash(seq) ^
       const DeepCollectionEquality().hash(title) ^
       const DeepCollectionEquality().hash(createdAt) ^
       const DeepCollectionEquality().hash(updatedAt);
 
+  @JsonKey(ignore: true)
   @override
   _$BookCopyWith<_Book> get copyWith =>
       __$BookCopyWithImpl<_Book>(this, _$identity);
@@ -207,27 +225,25 @@ class _$_Book implements _Book {
 
 abstract class _Book implements Book {
   const factory _Book(
-      {int id,
-      @required String isbn,
-      @required int seq,
-      @required String title,
-      @required String createdAt,
-      @required String updatedAt}) = _$_Book;
+      {required String isbn,
+      required int seq,
+      required String title,
+      required String createdAt,
+      required String updatedAt}) = _$_Book;
 
   factory _Book.fromJson(Map<String, dynamic> json) = _$_Book.fromJson;
 
   @override
-  int get id;
+  String get isbn => throw _privateConstructorUsedError;
   @override
-  String get isbn;
+  int get seq => throw _privateConstructorUsedError;
   @override
-  int get seq;
+  String get title => throw _privateConstructorUsedError;
   @override
-  String get title;
+  String get createdAt => throw _privateConstructorUsedError;
   @override
-  String get createdAt;
+  String get updatedAt => throw _privateConstructorUsedError;
   @override
-  String get updatedAt;
-  @override
-  _$BookCopyWith<_Book> get copyWith;
+  @JsonKey(ignore: true)
+  _$BookCopyWith<_Book> get copyWith => throw _privateConstructorUsedError;
 }

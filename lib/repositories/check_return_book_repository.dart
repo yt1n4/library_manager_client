@@ -1,7 +1,7 @@
 import 'package:state_notifier/state_notifier.dart';
 
 class CheckReturnBookRepository extends StateNotifier<List<int>> {
-  CheckReturnBookRepository() : super(List());
+  CheckReturnBookRepository() : super([]);
 
   void add(registerIndex) {
     state = [...state, registerIndex];

@@ -1,21 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/all.dart';
-import 'package:librarymanagerclient/models/book/book.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:librarymanagerclient/providers/client/ndlapi_client.dart';
-import 'package:librarymanagerclient/providers/db/book/book_state_table_provider.dart';
-import 'package:librarymanagerclient/providers/db/book/book_table_provider.dart';
+import 'package:librarymanagerclient/providers/db/book/book_multiple_tables_provider.dart';
 import 'package:librarymanagerclient/repositories/barcode_result_repository.dart';
 import 'package:librarymanagerclient/widgets/barcode_scanner_widget.dart';
 
 final barcodeResultProvider =
-    StateNotifierProvider.autoDispose((ref) => BarcodeResultRepository());
+    StateNotifierProvider.autoDispose<BarcodeResultRepository, String>(
+        (ref) => BarcodeResultRepository());
 
 class Register extends HookWidget {
   static const routeName = '/register';
 
-  Register({Key key}) : super(key: key);
+  Register({Key? key}) : super(key: key);
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -38,20 +37,8 @@ class Register extends HookWidget {
   }
 
   Widget _buildBarcodeScanning() {
-    final String stateScanner = useProvider(barcodeResultProvider.state);
-    final exporter = useProvider(barcodeResultProvider);
-
-    void _registerBook(String isbn, String title) async {
-      final Book book = Book(
-        isbn: isbn,
-        seq: (await BookTableProvider().getNumberOfBooks(isbn)) + 1,
-        title: title,
-        createdAt: DateTime.now().toString(),
-        updatedAt: DateTime.now().toString(),
-      );
-      await BookTableProvider().saveBook(book);
-      await BookStateTableProvider().saveBookByIsbn(isbn);
-    }
+    final String stateScanner = useProvider(barcodeResultProvider);
+    final exporter = useProvider(barcodeResultProvider.notifier);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -59,7 +46,7 @@ class Register extends HookWidget {
         _buildScanner(exporter),
         FutureBuilder(
           future: NdlApiClient().getBookByIsbn(stateScanner),
-          builder: (context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<Object?> snapshot) {
             if (stateScanner.isEmpty) {
               return Text('Scan result here.');
             } else if (snapshot.connectionState != ConnectionState.done) {
@@ -68,7 +55,7 @@ class Register extends HookWidget {
               return Text(snapshot.error.toString());
             } else {
               final isbn = stateScanner;
-              final title = snapshot.data;
+              final String title = snapshot.data as String;
               // https://stackoverflow.com/questions/56894644/how-to-show-a-dialog-inside-a-futurebuilder
               Future.delayed(
                 Duration.zero,
@@ -90,8 +77,9 @@ class Register extends HookWidget {
                                 color: Theme.of(context).primaryColor),
                           ),
                           onPressed: () async {
-                            _registerBook(isbn, title);
-                            _scaffoldKey.currentState.showSnackBar(
+                            await BookMultipleTablesProvider()
+                                .saveBookBatch(isbn, title);
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('登録完了'),
                                 duration: Duration(seconds: 1),
@@ -124,9 +112,14 @@ class Register extends HookWidget {
   }
 
   Widget _buildScanner(exporter) {
-    return FlatButton(
-      color: Colors.teal,
-      child: Text('BARCODE SCAN', style: TextStyle(color: Colors.white)),
+    return ElevatedButton(
+      style: TextButton.styleFrom(
+        primary: Colors.teal,
+      ),
+      child: Text(
+        'BARCODE SCAN',
+        style: TextStyle(color: Colors.white),
+      ),
       onPressed: () async {
         exporter.exportResult(await BarcodeScannerWidget().scan());
       },

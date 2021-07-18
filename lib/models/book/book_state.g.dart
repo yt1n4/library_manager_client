@@ -11,9 +11,9 @@ _$_BookState _$_$_BookStateFromJson(Map<String, dynamic> json) {
     isbn: json['isbn'] as String,
     seq: json['seq'] as int,
     isBorrowed: json['isBorrowed'] as int,
-    holderId: json['holderId'] as String,
-    borrowFrom: json['borrowFrom'] as String,
-    borrowTo: json['borrowTo'] as String,
+    holderId: json['holderId'] as String?,
+    borrowFrom: json['borrowFrom'] as String?,
+    borrowTo: json['borrowTo'] as String?,
     createdAt: json['createdAt'] as String,
     updatedAt: json['updatedAt'] as String,
   );

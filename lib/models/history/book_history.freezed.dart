@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'book_history.dart';
 
@@ -8,25 +8,27 @@ part of 'book_history.dart';
 // **************************************************************************
 
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 BookHistory _$BookHistoryFromJson(Map<String, dynamic> json) {
   return _BookHistory.fromJson(json);
 }
 
+/// @nodoc
 class _$BookHistoryTearOff {
   const _$BookHistoryTearOff();
 
-// ignore: unused_element
   _BookHistory call(
-      {int id,
-      @required String isbn,
-      @required int seq,
-      @required int isBorrowed,
-      @required @nullable String holderId,
-      @required @nullable String borrowFrom,
-      @required @nullable String borrowTo,
-      @required String createdAt}) {
+      {required String isbn,
+      required int seq,
+      required int isBorrowed,
+      required String? holderId,
+      required String? borrowFrom,
+      required String? borrowTo,
+      required String createdAt}) {
     return _BookHistory(
-      id: id,
       isbn: isbn,
       seq: seq,
       isBorrowed: isBorrowed,
@@ -36,43 +38,47 @@ class _$BookHistoryTearOff {
       createdAt: createdAt,
     );
   }
+
+  BookHistory fromJson(Map<String, Object> json) {
+    return BookHistory.fromJson(json);
+  }
 }
 
-// ignore: unused_element
+/// @nodoc
 const $BookHistory = _$BookHistoryTearOff();
 
+/// @nodoc
 mixin _$BookHistory {
-  int get id;
-  String get isbn;
-  int get seq;
-  int get isBorrowed;
-  @nullable
-  String get holderId;
-  @nullable
-  String get borrowFrom;
-  @nullable
-  String get borrowTo;
-  String get createdAt;
+  String get isbn => throw _privateConstructorUsedError;
+  int get seq => throw _privateConstructorUsedError;
+  int get isBorrowed => throw _privateConstructorUsedError;
+  String? get holderId => throw _privateConstructorUsedError;
+  String? get borrowFrom => throw _privateConstructorUsedError;
+  String? get borrowTo => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson();
-  $BookHistoryCopyWith<BookHistory> get copyWith;
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $BookHistoryCopyWith<BookHistory> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
+/// @nodoc
 abstract class $BookHistoryCopyWith<$Res> {
   factory $BookHistoryCopyWith(
           BookHistory value, $Res Function(BookHistory) then) =
       _$BookHistoryCopyWithImpl<$Res>;
   $Res call(
-      {int id,
-      String isbn,
+      {String isbn,
       int seq,
       int isBorrowed,
-      @nullable String holderId,
-      @nullable String borrowFrom,
-      @nullable String borrowTo,
+      String? holderId,
+      String? borrowFrom,
+      String? borrowTo,
       String createdAt});
 }
 
+/// @nodoc
 class _$BookHistoryCopyWithImpl<$Res> implements $BookHistoryCopyWith<$Res> {
   _$BookHistoryCopyWithImpl(this._value, this._then);
 
@@ -82,29 +88,48 @@ class _$BookHistoryCopyWithImpl<$Res> implements $BookHistoryCopyWith<$Res> {
 
   @override
   $Res call({
-    Object id = freezed,
-    Object isbn = freezed,
-    Object seq = freezed,
-    Object isBorrowed = freezed,
-    Object holderId = freezed,
-    Object borrowFrom = freezed,
-    Object borrowTo = freezed,
-    Object createdAt = freezed,
+    Object? isbn = freezed,
+    Object? seq = freezed,
+    Object? isBorrowed = freezed,
+    Object? holderId = freezed,
+    Object? borrowFrom = freezed,
+    Object? borrowTo = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed ? _value.id : id as int,
-      isbn: isbn == freezed ? _value.isbn : isbn as String,
-      seq: seq == freezed ? _value.seq : seq as int,
-      isBorrowed: isBorrowed == freezed ? _value.isBorrowed : isBorrowed as int,
-      holderId: holderId == freezed ? _value.holderId : holderId as String,
-      borrowFrom:
-          borrowFrom == freezed ? _value.borrowFrom : borrowFrom as String,
-      borrowTo: borrowTo == freezed ? _value.borrowTo : borrowTo as String,
-      createdAt: createdAt == freezed ? _value.createdAt : createdAt as String,
+      isbn: isbn == freezed
+          ? _value.isbn
+          : isbn // ignore: cast_nullable_to_non_nullable
+              as String,
+      seq: seq == freezed
+          ? _value.seq
+          : seq // ignore: cast_nullable_to_non_nullable
+              as int,
+      isBorrowed: isBorrowed == freezed
+          ? _value.isBorrowed
+          : isBorrowed // ignore: cast_nullable_to_non_nullable
+              as int,
+      holderId: holderId == freezed
+          ? _value.holderId
+          : holderId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      borrowFrom: borrowFrom == freezed
+          ? _value.borrowFrom
+          : borrowFrom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      borrowTo: borrowTo == freezed
+          ? _value.borrowTo
+          : borrowTo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
+/// @nodoc
 abstract class _$BookHistoryCopyWith<$Res>
     implements $BookHistoryCopyWith<$Res> {
   factory _$BookHistoryCopyWith(
@@ -112,16 +137,16 @@ abstract class _$BookHistoryCopyWith<$Res>
       __$BookHistoryCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int id,
-      String isbn,
+      {String isbn,
       int seq,
       int isBorrowed,
-      @nullable String holderId,
-      @nullable String borrowFrom,
-      @nullable String borrowTo,
+      String? holderId,
+      String? borrowFrom,
+      String? borrowTo,
       String createdAt});
 }
 
+/// @nodoc
 class __$BookHistoryCopyWithImpl<$Res> extends _$BookHistoryCopyWithImpl<$Res>
     implements _$BookHistoryCopyWith<$Res> {
   __$BookHistoryCopyWithImpl(
@@ -133,50 +158,62 @@ class __$BookHistoryCopyWithImpl<$Res> extends _$BookHistoryCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object id = freezed,
-    Object isbn = freezed,
-    Object seq = freezed,
-    Object isBorrowed = freezed,
-    Object holderId = freezed,
-    Object borrowFrom = freezed,
-    Object borrowTo = freezed,
-    Object createdAt = freezed,
+    Object? isbn = freezed,
+    Object? seq = freezed,
+    Object? isBorrowed = freezed,
+    Object? holderId = freezed,
+    Object? borrowFrom = freezed,
+    Object? borrowTo = freezed,
+    Object? createdAt = freezed,
   }) {
     return _then(_BookHistory(
-      id: id == freezed ? _value.id : id as int,
-      isbn: isbn == freezed ? _value.isbn : isbn as String,
-      seq: seq == freezed ? _value.seq : seq as int,
-      isBorrowed: isBorrowed == freezed ? _value.isBorrowed : isBorrowed as int,
-      holderId: holderId == freezed ? _value.holderId : holderId as String,
-      borrowFrom:
-          borrowFrom == freezed ? _value.borrowFrom : borrowFrom as String,
-      borrowTo: borrowTo == freezed ? _value.borrowTo : borrowTo as String,
-      createdAt: createdAt == freezed ? _value.createdAt : createdAt as String,
+      isbn: isbn == freezed
+          ? _value.isbn
+          : isbn // ignore: cast_nullable_to_non_nullable
+              as String,
+      seq: seq == freezed
+          ? _value.seq
+          : seq // ignore: cast_nullable_to_non_nullable
+              as int,
+      isBorrowed: isBorrowed == freezed
+          ? _value.isBorrowed
+          : isBorrowed // ignore: cast_nullable_to_non_nullable
+              as int,
+      holderId: holderId == freezed
+          ? _value.holderId
+          : holderId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      borrowFrom: borrowFrom == freezed
+          ? _value.borrowFrom
+          : borrowFrom // ignore: cast_nullable_to_non_nullable
+              as String?,
+      borrowTo: borrowTo == freezed
+          ? _value.borrowTo
+          : borrowTo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: createdAt == freezed
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
+/// @nodoc
 @JsonSerializable()
 class _$_BookHistory implements _BookHistory {
   const _$_BookHistory(
-      {this.id,
-      @required this.isbn,
-      @required this.seq,
-      @required this.isBorrowed,
-      @required @nullable this.holderId,
-      @required @nullable this.borrowFrom,
-      @required @nullable this.borrowTo,
-      @required this.createdAt})
-      : assert(isbn != null),
-        assert(seq != null),
-        assert(isBorrowed != null),
-        assert(createdAt != null);
+      {required this.isbn,
+      required this.seq,
+      required this.isBorrowed,
+      required this.holderId,
+      required this.borrowFrom,
+      required this.borrowTo,
+      required this.createdAt});
 
   factory _$_BookHistory.fromJson(Map<String, dynamic> json) =>
       _$_$_BookHistoryFromJson(json);
 
-  @override
-  final int id;
   @override
   final String isbn;
   @override
@@ -184,28 +221,23 @@ class _$_BookHistory implements _BookHistory {
   @override
   final int isBorrowed;
   @override
-  @nullable
-  final String holderId;
+  final String? holderId;
   @override
-  @nullable
-  final String borrowFrom;
+  final String? borrowFrom;
   @override
-  @nullable
-  final String borrowTo;
+  final String? borrowTo;
   @override
   final String createdAt;
 
   @override
   String toString() {
-    return 'BookHistory(id: $id, isbn: $isbn, seq: $seq, isBorrowed: $isBorrowed, holderId: $holderId, borrowFrom: $borrowFrom, borrowTo: $borrowTo, createdAt: $createdAt)';
+    return 'BookHistory(isbn: $isbn, seq: $seq, isBorrowed: $isBorrowed, holderId: $holderId, borrowFrom: $borrowFrom, borrowTo: $borrowTo, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _BookHistory &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.isbn, isbn) ||
                 const DeepCollectionEquality().equals(other.isbn, isbn)) &&
             (identical(other.seq, seq) ||
@@ -230,7 +262,6 @@ class _$_BookHistory implements _BookHistory {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(isbn) ^
       const DeepCollectionEquality().hash(seq) ^
       const DeepCollectionEquality().hash(isBorrowed) ^
@@ -239,6 +270,7 @@ class _$_BookHistory implements _BookHistory {
       const DeepCollectionEquality().hash(borrowTo) ^
       const DeepCollectionEquality().hash(createdAt);
 
+  @JsonKey(ignore: true)
   @override
   _$BookHistoryCopyWith<_BookHistory> get copyWith =>
       __$BookHistoryCopyWithImpl<_BookHistory>(this, _$identity);
@@ -251,37 +283,33 @@ class _$_BookHistory implements _BookHistory {
 
 abstract class _BookHistory implements BookHistory {
   const factory _BookHistory(
-      {int id,
-      @required String isbn,
-      @required int seq,
-      @required int isBorrowed,
-      @required @nullable String holderId,
-      @required @nullable String borrowFrom,
-      @required @nullable String borrowTo,
-      @required String createdAt}) = _$_BookHistory;
+      {required String isbn,
+      required int seq,
+      required int isBorrowed,
+      required String? holderId,
+      required String? borrowFrom,
+      required String? borrowTo,
+      required String createdAt}) = _$_BookHistory;
 
   factory _BookHistory.fromJson(Map<String, dynamic> json) =
       _$_BookHistory.fromJson;
 
   @override
-  int get id;
+  String get isbn => throw _privateConstructorUsedError;
   @override
-  String get isbn;
+  int get seq => throw _privateConstructorUsedError;
   @override
-  int get seq;
+  int get isBorrowed => throw _privateConstructorUsedError;
   @override
-  int get isBorrowed;
+  String? get holderId => throw _privateConstructorUsedError;
   @override
-  @nullable
-  String get holderId;
+  String? get borrowFrom => throw _privateConstructorUsedError;
   @override
-  @nullable
-  String get borrowFrom;
+  String? get borrowTo => throw _privateConstructorUsedError;
   @override
-  @nullable
-  String get borrowTo;
+  String get createdAt => throw _privateConstructorUsedError;
   @override
-  String get createdAt;
-  @override
-  _$BookHistoryCopyWith<_BookHistory> get copyWith;
+  @JsonKey(ignore: true)
+  _$BookHistoryCopyWith<_BookHistory> get copyWith =>
+      throw _privateConstructorUsedError;
 }

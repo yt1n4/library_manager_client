@@ -6,14 +6,13 @@ part 'book_history.g.dart';
 @freezed
 abstract class BookHistory with _$BookHistory {
   const factory BookHistory({
-    int id,
-    @required String isbn,
-    @required int seq,
-    @required int isBorrowed,
-    @required @nullable String holderId,
-    @required @nullable String borrowFrom,
-    @required @nullable String borrowTo,
-    @required String createdAt,
+    required String isbn,
+    required int seq,
+    required int isBorrowed,
+    required String? holderId,
+    required String? borrowFrom,
+    required String? borrowTo,
+    required String createdAt,
   }) = _BookHistory;
 
   factory BookHistory.fromJson(Map<String, dynamic> json) =>

@@ -7,7 +7,7 @@ import 'package:librarymanagerclient/providers/db/user/user_table_provider.dart'
 class RegisterUser extends HookWidget {
   static const routeName = '/borrow/register_user';
 
-  RegisterUser({Key key}) : super(key: key);
+  RegisterUser({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,35 +36,27 @@ class RegisterUser extends HookWidget {
 
 Widget _inputText(BuildContext context) {
   // borrow画面で読み込んだNFCのidentifierを受け取る
-  final String identifier = ModalRoute.of(context).settings.arguments;
-
-  // final String stateRegister = useProvider(registerUsernameRepository.state);
-  // final exporter = useProvider(registerUsernameRepository);
+  final String identifier =
+      ModalRoute.of(context)!.settings.arguments as String;
 
   final _formKey = GlobalKey<FormState>();
 
-  String _userName;
+  String _userName = '';
 
   // ユーザー情報をDBに登録し、borrow画面に戻す
-  void _registerAndNavigate(BuildContext context) async {
+  Future<void> _registerAndNavigate(BuildContext context) async {
+    final String now = DateTime.now().toString();
     final User user = User(
       identifier: identifier,
       name: _userName.replaceAll(RegExp(r'\s'), ''),
       // 借りる・返却のみできるユーザー
       permission: 1,
-      createdAt: DateTime.now().toString(),
-      updatedAt: DateTime.now().toString(),
+      createdAt: now,
+      updatedAt: now,
     );
 
-    // insertした列番号が返る
-    var result = await UserTableProvider().registerUser(user);
-    if (result is int) {
-      Navigator.of(context).popUntil(ModalRoute.withName('/borrow'));
-    } else {
-      //　列番号以外が返ったら氏名登録画面に戻す
-      //　失敗した時に何が返ってくるのか不明なのでこの動作をするのかも不明
-      Navigator.pop(context);
-    }
+    await UserTableProvider().saveUser(user);
+    Navigator.of(context).popUntil(ModalRoute.withName('/borrow'));
   }
 
   // 入力された氏名が正しいか確認するダイアログ
@@ -78,7 +70,7 @@ Widget _inputText(BuildContext context) {
           new SimpleDialogOption(
             child: new Text('OK'),
             onPressed: () async {
-              _registerAndNavigate(context);
+              await _registerAndNavigate(context);
             },
           ),
           new SimpleDialogOption(
@@ -91,12 +83,6 @@ Widget _inputText(BuildContext context) {
       ),
     );
   }
-
-  // riverpodsで状態管理しようとするとうまくいかなかった
-
-  // void _register(String value) async {
-  //   // exporter.exportResult(value);
-  // }
 
   return Form(
     key: _formKey,
@@ -117,7 +103,8 @@ Widget _inputText(BuildContext context) {
               hintText: '例) 山田太郎',
             ),
             // _formKey.currentState.save()で呼ばれる
-            onSaved: (String value) async {
+            onSaved: (String? value) async {
+              value ??= '';
               _userName = value;
             },
             // 入力を確定した時に呼ばれる
@@ -125,7 +112,8 @@ Widget _inputText(BuildContext context) {
               // _register(value);
             },
             // _formKey.currentState.validate()で呼ばれる
-            validator: (String value) {
+            validator: (String? value) {
+              value ??= '';
               if (value.isEmpty) {
                 return '必須です';
               }
@@ -133,11 +121,11 @@ Widget _inputText(BuildContext context) {
             },
           ),
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text('REGISTER'),
           onPressed: () async {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
               await _showAlertDialog();
             }
           },

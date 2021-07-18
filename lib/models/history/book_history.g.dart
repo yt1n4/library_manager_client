@@ -8,20 +8,18 @@ part of 'book_history.dart';
 
 _$_BookHistory _$_$_BookHistoryFromJson(Map<String, dynamic> json) {
   return _$_BookHistory(
-    id: json['id'] as int,
     isbn: json['isbn'] as String,
     seq: json['seq'] as int,
     isBorrowed: json['isBorrowed'] as int,
-    holderId: json['holderId'] as String,
-    borrowFrom: json['borrowFrom'] as String,
-    borrowTo: json['borrowTo'] as String,
+    holderId: json['holderId'] as String?,
+    borrowFrom: json['borrowFrom'] as String?,
+    borrowTo: json['borrowTo'] as String?,
     createdAt: json['createdAt'] as String,
   );
 }
 
 Map<String, dynamic> _$_$_BookHistoryToJson(_$_BookHistory instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'isbn': instance.isbn,
       'seq': instance.seq,
       'isBorrowed': instance.isBorrowed,

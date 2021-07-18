@@ -1,52 +1,57 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:librarymanagerclient/errors/user/UserNotFoundException.dart';
 import 'package:librarymanagerclient/models/user/user.dart';
-import 'package:librarymanagerclient/providers/db/db_provider.dart';
-import 'package:sqflite/sqflite.dart';
 
-class UserTableProvider extends DBProvider {
-  @override
-  String get databaseName => 'user_db.sqlite';
+class UserTableProvider {
+  static final String tableName = 'users';
 
-  @override
-  String get tableName => 'users';
-
-  @override
-  int get version => 1;
-
-  @override
-  createTable(Database db, int version) => db.execute("""
-      CREATE TABLE $tableName(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        identifier STRING,
-        permission INTEGER,
-        name STRING,
-        createdAt TEXT NOT NULL,
-        updatedAt TEXT NOT NULL,
-        UNIQUE(identifier)
-      );
-    """);
-
-  Future<int> registerUser(User user) async {
-    final db = await table;
-    return await db.insert(tableName, user.toJson());
+  Future<void> saveUser(User user) async {
+    var data = user.toJson();
+    await FirebaseFirestore.instance
+        .collection(tableName)
+        .doc(data['identifier'])
+        .set(data);
   }
 
-  Future<dynamic> getUsers() async {
-    final db = await table;
-    List<Map> result = await db.query(tableName);
-    return result;
+  Future<List<User>> getUsers() async {
+    var res = await FirebaseFirestore.instance.collection(tableName).get();
+    List<User> users = [];
+    res.docs.forEach((element) {
+      var user = {...element.data()};
+      users.add(User.fromJson(user));
+    });
+
+    return users;
   }
 
-  Future<String> getUserFromIdentifier(String identifier) async {
-    final db = await table;
-    List<Map> result = await db.query(
-      tableName,
-      where: "identifier=?",
-      whereArgs: [identifier],
-    );
-    var userName;
-    if (result.length > 0) {
-      userName = result[0]['name'].toString();
+  Future<User> getUser(String identifier) async {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('identifier', isEqualTo: identifier)
+        .get();
+    if (res.docs.length == 0) {
+      throw UserNotFoundException();
     }
-    return userName;
+    var user = res.docs.last.data();
+
+    return User.fromJson(user);
+  }
+
+  Future<String> getUserId(String identifier) async {
+    var res = await FirebaseFirestore.instance
+        .collection(tableName)
+        .where('identifier', isEqualTo: identifier)
+        .get();
+    if (res.docs.length == 0) {
+      throw UserNotFoundException();
+    }
+    var id = res.docs.last.id;
+
+    return id;
+  }
+
+  Future<void> delete(String identifier) async {
+    var id = await getUserId(identifier);
+    await FirebaseFirestore.instance.collection(tableName).doc(id).delete();
   }
 }
